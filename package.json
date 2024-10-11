@@ -1,0 +1,23 @@
+{
+  "name": "orig-back",
+  "version": "1.0.0",
+  "description": "back-end do orig",
+  "main": "index.ts",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raave-aires/orig-back.git"
+  },
+  "keywords": [
+    "back",
+    "orig"
+  ],
+  "author": "raave-aires",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/raave-aires/orig-back/issues"
+  },
+  "homepage": "https://github.com/raave-aires/orig-back#readme"
+}
