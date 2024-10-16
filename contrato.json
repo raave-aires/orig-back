@@ -1,0 +1,51 @@
+{
+    "dados_basicos_do_contrato": {
+        "data_do_contrato": "03/10/2024",
+        "tipo_de_transacao": "compra",
+        "produto": "soja",
+        "safra": "2024/2025",
+        "municipio": "Paragominas"
+    },
+
+    "volume_e_valor": {
+        "volume": 9,
+        "sacas": 150,
+        "moeda_usada": "Dólar",
+        "valor_da_saca": 19.5,
+        "valor_total": "US$ 2.925",
+        "ptax": "R$ 5,6749",
+        "dia_do_ptax": "16/10/2024",
+        "valor_convertido": "R$ 16.599,08",
+        "data_do_pagamento": "16/10/2024"
+    },
+
+    "dados_de_entrega": {
+        "filial": "Paragominas - Matriz",
+        "terceiro": false,
+        "local_do_armazem_terceiro": null,
+        "nome_armazem_de_terceiro": null,
+        "data_de_entrega": "16/10/2024"
+    },
+
+    "dados_do_cliente": {
+        "nome_do_parceiro": "Raavë Aires",
+        "tipo_de_parceiro": "Pessoa física",
+        "cpf": "000.000.002-02",
+        "endereco_do_cliente": {
+            "cep": "68627-550",
+            "rua": "Rua Dilmax Meira",
+            "numero": 0.0,
+            "bairro": "Nova Conquista",
+            "cidade": "Paragominas",
+            "estado": "Pará"
+        },
+        "dados_bancarios": {
+            "recebedor": "cliente",
+            "nome_do_recebedor": "Raavë Aires",
+            "cpf": "000.000.002-02",
+            "banco": "Banco X",
+            "agencia": "0001",
+            "numero_da_conta": "00000001-9"
+        }
+    }
+}
