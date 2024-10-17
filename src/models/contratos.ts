@@ -1,7 +1,8 @@
 import mongoose, { Schema, Document, Model, CallbackError } from "mongoose";
 
-interface IContrato extends Document {
+interface valid_contrato extends Document {
   numero_do_contrato: string;
+
   dados_basicos_do_contrato: {
     data_do_contrato: string;
     tipo_de_transacao: string;
@@ -9,6 +10,7 @@ interface IContrato extends Document {
     safra: string;
     municipio: string;
   };
+
   volume_e_valor: {
     volume: number;
     sacas: number;
@@ -20,6 +22,7 @@ interface IContrato extends Document {
     valor_convertido: string;
     data_do_pagamento: string;
   };
+
   dados_de_entrega: {
     filial: string;
     terceiro: boolean;
@@ -27,6 +30,7 @@ interface IContrato extends Document {
     nome_armazem_de_terceiro?: string | null;
     data_de_entrega: string;
   };
+
   dados_do_cliente: {
     nome_do_parceiro: string;
     tipo_de_parceiro: string;
@@ -48,11 +52,14 @@ interface IContrato extends Document {
       numero_da_conta: string;
     };
   };
+
+  observacoes: string;
 }
 
 // Definição do Schema para o contrato
-const esquemaDeContrato: Schema<IContrato> = new Schema({
-  numero_do_contrato: { type: String, unique: true }, // Garantimos unicidade
+const esquema_do_contrato: Schema<valid_contrato> = new Schema({
+  numero_do_contrato: { type: String, unique: true }, 
+
   dados_basicos_do_contrato: {
     data_do_contrato: { type: String, required: true },
     tipo_de_transacao: { type: String, required: true },
@@ -60,6 +67,7 @@ const esquemaDeContrato: Schema<IContrato> = new Schema({
     safra: { type: String, required: true },
     municipio: { type: String, required: true },
   },
+
   volume_e_valor: {
     volume: { type: Number, required: true },
     sacas: { type: Number, required: true },
@@ -71,13 +79,15 @@ const esquemaDeContrato: Schema<IContrato> = new Schema({
     valor_convertido: { type: String, required: true },
     data_do_pagamento: { type: String, required: true },
   },
+
   dados_de_entrega: {
     filial: { type: String, required: true },
-    terceiro: { type: Boolean, required: true },
+    terceiro: { type: Boolean, required: true, default: false},
     local_do_armazem_terceiro: { type: String, default: null },
     nome_armazem_de_terceiro: { type: String, default: null },
     data_de_entrega: { type: String, required: true },
   },
+
   dados_do_cliente: {
     nome_do_parceiro: { type: String, required: true },
     tipo_de_parceiro: { type: String, required: true },
@@ -85,7 +95,7 @@ const esquemaDeContrato: Schema<IContrato> = new Schema({
     endereco_do_cliente: {
       cep: { type: String, required: true },
       rua: { type: String, required: true },
-      numero: { type: Number, required: true },
+      numero: { type: Number, required: true, default: null },
       bairro: { type: String, required: true },
       cidade: { type: String, required: true },
       estado: { type: String, required: true },
@@ -99,40 +109,41 @@ const esquemaDeContrato: Schema<IContrato> = new Schema({
       numero_da_conta: { type: String, required: true },
     },
   },
+
+  observacoes: { type: String }
 });
 
-// Hook para atribuir o número do contrato automaticamente
-esquemaDeContrato.pre<IContrato>('save', async function (next) {
+// função de atribuição automática de número do contrato:
+esquema_do_contrato.pre<valid_contrato>('save', async function (next) {
   const contrato = this;
-  const dataAtual = new Date();
-  const ano = String(dataAtual.getFullYear()).slice(-2); // Últimos dois dígitos do ano
-  const mes = String(dataAtual.getMonth() + 1).padStart(2, '0'); // Mês com dois dígitos
 
-  const prefixo = `${ano}${mes}`; // Formato base do número de contrato: "YYMM"
+  const dataAtual = new Date();
+  const ano = String(dataAtual.getFullYear()).slice(-2); // pega os últimos dois dígitos do ano
+  const mes = String(dataAtual.getMonth() + 1).padStart(2, '0'); // pega o mês com dois dígitos
+  const prefixo = `${ano}${mes}`; // formato base do número de contrato: "YYMM"
 
   try {
-    // Buscar o último contrato criado neste mês
-    const ultimoContrato = await Contrato.findOne({
-      numero_do_contrato: { $regex: `^${prefixo}-` }
+    const ultimo_contrato = await Contrato.findOne({
+      numero_do_contrato: { $regex: `^${prefixo}-` } // verifica qual o número do último contrato criado neste mês
     }).sort({ numero_do_contrato: -1 });
 
-    let proximoNumero = 1;
+    let proximo_numero = 1;
 
-    if (ultimoContrato) {
-      // Extrair e incrementar o número crescente do contrato anterior
-      const partes = ultimoContrato.numero_do_contrato.split('-');
-      const ultimoIncremento = parseInt(partes[1], 10);
-      proximoNumero = ultimoIncremento + 1;
+    if (ultimo_contrato) {
+      // funções para extrair e incrementar o número do contrato anterior
+      const partes = ultimo_contrato.numero_do_contrato.split('-');
+      const ultimo_incremento = parseInt(partes[1], 10);
+      proximo_numero = ultimo_incremento + 1;
     }
 
     // Atribuir o novo número de contrato no formato YYMM-XXXX
-    contrato.numero_do_contrato = `${prefixo}-${String(proximoNumero).padStart(4, '0')}`;
+    contrato.numero_do_contrato = `${prefixo}-${String(proximo_numero).padStart(4, '0')}`;
     next();
-  } catch (error) {
+  } catch(error){
     next(error as CallbackError); // Type assertion para evitar erro de tipagem
   }
 });
 
-const Contrato: Model<IContrato> = mongoose.model<IContrato>('Contrato', esquemaDeContrato);
+const Contrato: Model<valid_contrato> = mongoose.model<valid_contrato>('Contrato', esquema_do_contrato);
 
 export default Contrato;

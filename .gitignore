@@ -1,2 +1,5 @@
+# pastas:
 node_modules
+
+# arquivos:
 .env

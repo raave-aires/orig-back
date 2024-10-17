@@ -9,12 +9,12 @@ import Contrato from '../models/contratos';
 export const router: Router = express.Router();
 
 // middlewares:
-router.use('/style', express.static(path.join(__dirname, '../../style'))); // middleware para servir estilos junto da pagina html
+router.use('/style', express.static(path.join(__dirname, '../../public/style/output.css'))); // middleware para servir estilos junto da pagina html
 
 // rotas:
 router.get('/', (req: Request, res: Response) => {
     console.log('O servidor está funcionando.')
-    res.sendFile(path.join(__dirname, '../../servidor-iniciado.html'));
+    res.sendFile(path.join(__dirname, '../../public/pages/estado-do-servidor.html'));
 })
 
 router.get('/visualizar', async (req: Request, res: Response) => {
