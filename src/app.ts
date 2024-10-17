@@ -2,20 +2,20 @@
 import express from 'express';
 
 // importação de funções:
-import { router } from "./routes/rotas"
-import { conectarMongoDB } from './config/database';
+import { rotas } from "./routes/rotas"
+import { conectar_ao_banco_de_dados } from './config/database';
 
 // variaveis:
 const app = express();
 const PORT = 3000;
 
-conectarMongoDB();
+conectar_ao_banco_de_dados();
 
 // middlewares:
 app.use(express.json()); // midleware para lidar com json
-app.use(router); // faz as rotas funcionarem
+app.use(rotas); // faz as rotas funcionarem
 
 // inicia o servidor
 app.listen(PORT, () => {
-    console.log(`O servidor está rodando em http://localhost:${PORT}`);
+  console.log(`O servidor está rodando em http://localhost:${PORT}.`);
 });
