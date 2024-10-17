@@ -19,3 +19,5 @@ app.use(rotas); // faz as rotas funcionarem
 app.listen(PORT, () => {
   console.log(`O servidor está rodando em http://localhost:${PORT}.`);
 });
+
+export { app };
